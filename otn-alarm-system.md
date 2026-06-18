@@ -185,6 +185,3 @@ OTN 告警体系的设计思想可归纳为三点：
 1. **分层独立监控**：OTU 管段、ODU 管路径、TCM 管域、光层管物理——每一层有自己的眼睛
 2. **AIS 级联抑制**：根因永远在"最下层首个告警"
 3. **告警 + 性能双轨**：告警是"有没有断"，性能是"快不快断了"——真正的运维能力体现在后者
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true});</script>
