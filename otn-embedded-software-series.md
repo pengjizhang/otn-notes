@@ -47,6 +47,7 @@ flowchart TB
 
 - **[① 硬件抽象层：把硬件差异压到边界里](otn-embedded-01-hal)**
 - **[② 状态机体系：如何让复杂状态仍然可预测](otn-embedded-02-state-machine)**
+- **[③ 配置事务系统：如何保证配置一致、可回滚、可恢复](otn-embedded-03-config-transaction)**
 
 ## 系列目录
 
