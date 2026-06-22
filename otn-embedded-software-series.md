@@ -49,6 +49,7 @@ flowchart TB
 - **[② 状态机体系：如何让复杂状态仍然可预测](otn-embedded-02-state-machine)**
 - **[③ 配置事务系统：如何保证配置一致、可回滚、可恢复](otn-embedded-03-config-transaction)**
 - **[④ 告警与故障处理：从事件上报到故障传播理解](otn-embedded-04-alarm-fault)**
+- **[⑤ 高可靠机制：如何让设备失败可控、升级可退、主备可信](otn-embedded-05-ha)**
 
 ## 系列目录
 
