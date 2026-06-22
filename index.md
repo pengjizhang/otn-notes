@@ -8,6 +8,7 @@ title: OTN 光网络技术笔记
 
 - [OTN 嵌入式软件系列：把复杂设备组织成确定性系统](otn-embedded-software-series)
 - [OTN 嵌入式软件系列 ①：硬件抽象层——把硬件差异压到边界里](otn-embedded-01-hal)
+- [OTN 嵌入式软件系列 ②：状态机体系——如何让复杂状态仍然可预测](otn-embedded-02-state-machine)
 
 ## 文章
 
