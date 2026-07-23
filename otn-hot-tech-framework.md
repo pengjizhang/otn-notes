@@ -88,6 +88,21 @@ flowchart TB
     H -.管控与编排.-> F
 ```
 
+对照前述八大热点方向，各技术落在六层架构的位置如下：
+
+| 热点方向 | 主要层次 | 说明 |
+|---|---|---|
+| **高速相干传输** | OTU/光通道层（触及 OTS 层） | 调制格式、FEC、DSP、相干检测在 OTU/OCh 层；OSNR、跨段设计触及光传输段层 |
+| **灵活栅格 DWDM** | 光复用段层 | Flex Grid、Super Channel 是波长复用与频谱规划的事，归属 OMS 层 |
+| **OXC/ROADM** | 光复用段层 | 波长级全光调度，CDC-F 是 OMS 层核心能力 |
+| **OSU/M-OTN** | ODU 电层 | OSU 是 ODU 体系内小颗粒增强，在 ODUk/ODUflex 之下做细粒度复用 |
+| **Liquid OTN/PeOTN/POTN** | ODU 电层 | ODUk/Packet/OSU 统一交叉调度，核心在电层融合 |
+| **SDN 管控** | 管控层 | NETCONF/YANG/Telemetry/PCE 横跨所有层做编排与建模 |
+| **算网全光底座** | 跨层（端到端） | 从客户业务层到 OTS 层全栈协同，不是单一层技术 |
+| **智能运维** | 管控层 | AI 预测、OSNR 趋势、光缆健康度归属管控/运维范畴 |
+
+> 简单记：**高速相干看 OTU 层，Flex Grid/ROADM/OXC 看复用段层，OSU/PeOTN 看电层，SDN/AI 看管控层**。管控层横跨所有层做编排，电层做调度，光层做传输。
+
 ---
 
 ## 4. 第一层：高速相干传输技术
