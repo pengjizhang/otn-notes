@@ -17,3 +17,4 @@ title: OTN 光网络技术笔记
 
 - [OTN 告警系统详解：从分层监控到故障定位](otn-alarm-system)
 - [OTN 创新的本质：从硬管道到确定性连接服务](otn-innovation)
+- [OTN 热点技术——系统化、层次化研究框架](otn-hot-tech-framework)
