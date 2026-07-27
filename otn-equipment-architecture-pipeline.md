@@ -178,6 +178,80 @@ graph TD
 | **保护盘 (OLP)** | **MEMS 光开关** | 微机电光器件 | 响应微秒级中断信号，在 **<10ms** 内物理切换主备光纤光路 |
 | | **Splitter (分光器)** | 无源分光 | 1:2 光耦合器，将发射端光信号一分为二，同时发往主/备两条线路光纤 |
 
+### 3.4 光模块内部器件：灰光 vs 相干 DCO
+
+前面 3.2 和 3.3 拆的是单盘级的器件。实际工程中，大量光器件被封装在可插拔**光模块**里。光模块分两类，器件构成差异很大。
+
+#### 客户侧灰光模块（如 100G QSFP28 / 400G QSFP-DD）
+
+```mermaid
+flowchart LR
+    subgraph Gray["客户侧灰光模块"]
+        TOSA["<b>TOSA</b><br/>发射组件<br/>DML/EML 激光器<br/>+ 调制驱动器"]
+        ROSA["<b>ROSA</b><br/>接收组件<br/>PIN/APD 光电二极管<br/>+ TIA 跨阻放大器"]
+        CDR["<b>CDR</b><br/>时钟数据恢复<br/>消除 Jitter"]
+        MCU["<b>MCU</b><br/>模块管理<br/>温度/电压/DDMI<br/>CMIS 协议上报"]
+    end
+    TOSA --> FiberOut[发射光纤]
+    FiberIn[接收光纤] --> ROSA
+    CDR --> TOSA
+    ROSA --> CDR
+    MCU -.管控.-> TOSA
+    MCU -.管控.-> ROSA
+    MCU -.管控.-> CDR
+```
+
+| 器件 | 作用 | 一句话 |
+| :--- | :--- | :--- |
+| **TOSA** | 发射组件（含激光器 + 调制驱动器），电→光 | 把电变成光 |
+| **ROSA** | 接收组件（含 PIN/APD + TIA），光→电 | 把光变成电 |
+| **CDR** | 从抖动信号中提取干净时钟 | 消抖、重定时 |
+| **MCU** | 温度/电压/功率监控，DDMI 诊断，CMIS 协议对上报告 | 模块的"管家" |
+
+> 灰光模块只管"亮不亮"——固定波长（1310nm/850nm），没有 DSP，不调谐，不纠错。
+
+#### 相干 DCO 光模块（如 400G CFP2-DCO / 400ZR QSFP-DD）
+
+```mermaid
+flowchart LR
+    subgraph DCO["相干 DCO 光模块"]
+        DSP_C["<b>DSP 芯片</b><br/>QAM 调制解调<br/>oFEC 编解码<br/>CD/PMD 补偿"]
+        ITLA_C["<b>ITLA</b><br/>窄线宽可调谐激光器<br/>C 波段自由调谐"]
+        DP_IQ["<b>DP-IQ 调制器</b><br/>X/Y 双偏振调制<br/>Mach-Zehnder 干涉"]
+        ICR_C["<b>ICR</b><br/>集成相干接收机<br/>90°光桥+平衡PD+TIA"]
+        MCU_C["<b>MCU</b><br/>模块管理<br/>CMIS 5.0 接口"]
+    end
+    DSP_C --> ITLA_C
+    DSP_C --> DP_IQ
+    ITLA_C --> DP_IQ
+    DSP_C --> ICR_C
+    ITLA_C --> ICR_C
+    MCU_C -.管控.-> DSP_C
+    MCU_C -.管控.-> ITLA_C
+```
+
+| 器件 | 作用 | 一句话 |
+| :--- | :--- | :--- |
+| **DSP 芯片** | 模块内置——QAM 调制解调、oFEC 编解码、CD/PMD 色散补偿全在模块里完成 | 迷你版线路盘大脑 |
+| **ITLA** | 窄线宽可调谐激光器，线宽 < 100kHz，C/L 波段自由调谐波长 | 精确调整发射波长 |
+| **DP-IQ 调制器** | DSP 输出的电信号调制到 X/Y 双偏振光波上（硅光或铌酸锂工艺） | 电信号印到光载波上 |
+| **ICR** | 收端：90° 光桥 + 平衡光电探测器 + TIA → 输出 IX/QX/IY/QY 四路基带 | 相干光还原为电信号 |
+| **MCU** | 模块管理，CMIS 5.0 接口 | 同上 |
+
+> **DCO 模块 = 把传统线路盘上的 DSP + ITLA + 调制器 + ICR 全塞进一个可插拔模块里了**。这就是 400ZR/800ZR 为什么能做到"交换机的光口直接出相干波长"。
+
+#### 两类光模块对比
+
+| 维度 | 灰光模块 | 相干 DCO 模块 |
+| :--- | :--- | :--- |
+| **核心器件** | TOSA + ROSA + CDR + MCU | DSP + ITLA + DP-IQ 调制器 + ICR + MCU |
+| **有无 DSP** | 无 | 有（内置，算法密集） |
+| **波长** | 固定（1310nm / 850nm） | C/L 波段可调谐 |
+| **调制格式** | NRZ / PAM4（简单开关调制） | QPSK / 16QAM / PCS 高阶相干调制 |
+| **传输距离** | 短距（几百米~10km） | 中长距（80km~数百公里） |
+| **典型封装** | QSFP28 / QSFP-DD / SFP+ | CFP2-DCO / QSFP-DD DCO |
+| **一句话** | 只管"亮不亮" | 等于"迷你线路盘" |
+
 ---
 
 ## 第四章：端到端业务物理与逻辑链路全流程解构
