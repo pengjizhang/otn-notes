@@ -131,7 +131,7 @@ graph TD
 | :--- | :--- | :--- | :--- |
 | **支路盘 (Client)** | **ROSA / TOSA** | 光电子组件 | ROSA：PIN/APD 光敏二极管将光转电流，TIA（跨阻放大器）转为电压。TOSA：激光驱动器驱动 DML/EML 激光器发光 |
 | | **CDR** | 混信号芯片 | 时钟数据恢复 (Clock Data Recovery)，从抖动信号中提取干净时钟脉冲，消除 Jitter |
-| | **Gearbox** | 逻辑 PHY | 接口速率转换芯片，如将 4×25G NRZ 转换复复用为 2×50G PAM4 差分信号 |
+| | **Gearbox** | 逻辑 PHY | 客户侧与 OTN 内部的速率/编码转换桥。例如 100GE 以 4×25G NRZ（CAUI-4）输入，Gearbox 聚合为 2×50G PAM4 送往 Framer——两边总带宽相同，但 lane 数、单 lane 速率、编码格式不同，需要 Gearbox 做跨时钟域转换。减少 lane 数也降低了 PCB 布线密度和芯片引脚数。 |
 | | **OTN Framer** | 数字 ASIC/FPGA | GMP 通用映射引擎计算填充 Stuffing 比特；开销插入器写入 OPU/ODU 帧头、Path Trace、BIP-8 校验及 TCM 开销 |
 | | **SerDes** | 接口芯片 | 串行/解串器，将内部并行总线转为 56G/112G PAM4 高速差分信号驱动无源背板 |
 | **交叉盘 (XCS)** | **SerDes Retimer** | 信号 Conditioning | 针对高频背板衰减进行 CTLE/DFE 接收端均衡与 TX 预加重 (Pre-emphasis)，恢复信号眼图 |
