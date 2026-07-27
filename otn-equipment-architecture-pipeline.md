@@ -32,21 +32,46 @@ timeline
 ```mermaid
 mindmap
   root((OTN 软件系统解构))
-    1. 固件与芯片逻辑
-      相干 DSP 固件 (CD/PMD补偿, 16QAM/64QAM 调制解调, sFEC算法)
-      FPGA/ASIC 逻辑 (OTUCn/FlexO编解码, GMP映射引擎, 切片隔离)
-      MCU/CPLD 微码 (电源上电时序, 温控风扇 PWM 调节, 热插拔保护)
-    2. 驱动与硬件抽象层
-      CMIS 5.0 光模块驱动 (QSFP-DD/CFP2-DCO 状态与 DDMI 读写)
-      芯片 SDK (Broadcom/Marvell/Inphi/海思 Switch Fabric SDK)
-      总线驱动 (PCIe/MDIO/I2C/SPI)
-    3. 操作系统与容器层
-      实时 OS 内核 (Linux PREEMPT_RT / VxWorks 50ms 中断响应)
-      容器化微服务 (Docker/k8s 网管代理无中断热升级)
-    4. FOS 业务与控制平面
-      ASON/GMPLS 控制平面 (OSPF-TE 发现, RSVP-TE 拓扑, 自愈重路由)
-      50ms 高可靠 APS 保护倒换引擎 (硬件中断驱动)
-      SDON Agent/PCE (OpenConfig/NETCONF/gRPC 接口)
+    固件软件
+      相干 DSP 固件
+        CD/PMD 补偿
+        16QAM/64QAM 调制解调
+        sFEC 算法
+      FPGA/ASIC 逻辑
+        OTUCn/FlexO 编解码
+        GMP 映射引擎
+        切片隔离
+      MCU/CPLD 微码
+        电源上电时序
+        温控风扇 PWM 调节
+        热插拔保护
+    驱动软件
+      CMIS 5.0 光模块驱动
+        QSFP-DD/CFP2-DCO 状态读写
+        DDMI 数字诊断
+      芯片 SDK
+        Broadcom/Marvell/Inphi SDK
+        海思 Switch Fabric SDK
+      总线驱动
+        PCIe
+        MDIO/I2C/SPI
+    操作系统
+      实时 OS 内核
+        Linux PREEMPT_RT
+        VxWorks 50ms 中断响应
+      容器化微服务
+        Docker 组件热升级
+        k8s 网管代理
+    FOS软件
+      ASON/GMPLS 控制平面
+        OSPF-TE 拓扑发现
+        RSVP-TE 路径建立
+        自愈重路由
+      50ms APS 保护倒换引擎
+        硬件中断驱动
+      SDON Agent/PCE
+        OpenConfig 接口
+        NETCONF/gRPC 接口
 ```
 
 ### 软件各层核心功能表
