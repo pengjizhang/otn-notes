@@ -15,10 +15,10 @@ title: OTN 设备全栈解构与端到端业务流水线全景
 ```mermaid
 timeline
     title 光传送网（OTN）技术四代演进历程
-    WDM 时代 (线路技术) : 点到点大容量传输，受限于电再生器成本，缺乏组网与管理开销
-    经典 OTN 时代 (G.709 数字封装) : "光波集装箱"概念，OPU/ODU/OTU 三层封装，电交叉与波分协同管理
-    POTN/MOTN 时代 (分组与5G优化) : L0/L1 光传送+L2 PTN 分组交换，单级复用与 1μs 超低时延，5G 硬切片与软切片
-    超100G与SDON时代 (软件定义全光网) : Flex OTN/FlexO/OTUCn，32维 Flex-Grid ROADM/全光背板，SDON 集中控制
+    WDM 时代 (线路技术) : 点到点大容量传输<br/>受限于电再生器成本<br/>缺乏组网与管理开销
+    经典 OTN 时代 (G.709 数字封装) : "光波集装箱"概念<br/>OPU/ODU/OTU 三层封装<br/>电交叉与波分协同管理
+    POTN/MOTN 时代 (分组与5G优化) : L0/L1 光传送 + L2 PTN 分组交换<br/>单级复用与 1μs 超低时延<br/>5G 硬切片与软切片
+    超100G与SDON时代 (软件定义全光网) : Flex OTN/FlexO/OTUCn<br/>32维 Flex-Grid ROADM/全光背板<br/>SDON 集中控制
 ```
 
 > **核心本质**：传统 WDM 仅仅是"点到点高速公路"，解决的是容量问题；而 OTN 通过引入开销（Overhead）与交叉（Cross-connect），赋予了光波长精确管理、监控、路由与保护的能力，成为了光网络领域的**智能交通管理系统**。
