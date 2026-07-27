@@ -183,60 +183,64 @@ graph TD
 
 ### 4.1 100GE 业务跨长途传输全流程
 
-以一条 **100GE 客户业务** 从 **站点 A（北京）** 跨越 1000 公里传输至 **站点 B（上海）** 为例：
+以一条 **100GE 客户业务** 从 **站点 A（北京）** 跨越 1000 公里传输至 **站点 B（上海）** 为例。整个过程分为三个连续的阶段。
+
+#### 阶段一：站点 A —— 客户接入、电交叉与相干发射（步骤 1-4）
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    participant ClientA as 客户设备 A
-    participant TribA as 站点A: 支路盘
-    participant BP_A as 站点A: 高速背板
-    participant XCSA as 站点A: 电交叉盘
-    participant LineA as 站点A: 线路相干盘
-    participant WSSA as 站点A: ROADM
-    participant OAA as 站点A: 光放大盘
-    participant LineFiber as 传输光纤
-    participant OAB as 站点B: 光放大盘
-    participant WSSB as 站点B: ROADM
-    participant LineB as 站点B: 线路相干盘
-    participant XCSB as 站点B: 电交叉盘
-    participant TribB as 站点B: 支路盘
-    participant ClientB as 客户设备 B
+    participant Client as 客户设备A
+    participant Trib as 支路盘
+    participant BP as 高速背板
+    participant XCS as 电交叉盘
+    participant Line as 线路相干盘
 
-    rect rgb(20, 35, 60)
-    note over ClientA, LineA: 站点 A 发送端电/光处理流程
-    ClientA->>TribA: 1. 发送 100GE 灰光信号 (1310nm)
-    note over TribA: ROSA探测光→TIA转电压→CDR提取干净时钟→Framer GMP映射入OPU4，写入ODU4/PathTrace开销
-    TribA->>BP_A: 2. SerDes 转换为 112G PAM4 差分信号
-    BP_A->>XCSA: 3. 背板传输至集中电交叉盘
-    note over XCSA: Retimer恢复信号眼图→Switch Fabric ASIC TDM时隙无阻塞交叉调度至指定线路槽位
-    XCSA->>LineA: 4. 送入 400G 相干线路盘
-    note over LineA: FlexO/OTUCn组帧+插入oFEC→DSP QPSK/16QAM调制+数字色散预补偿→ITLA产生193.1THz窄线宽激光→DP-IQ调制器调制为400G双偏振相干光波
-    end
+    Client->>Trib: 1. 发送 100GE 灰光 (1310nm)
+    Note over Trib: ROSA 光转电→TIA 放大→CDR 提取时钟<br/>Framer GMP 映射入 OPU4，写入开销
+    Trib->>BP: 2. SerDes → 112G PAM4 差分信号
+    BP->>XCS: 3. 背板传输至电交叉盘
+    Note over XCS: Retimer 均衡→Fabric ASIC TDM 无阻塞交叉调度
+    XCS->>Line: 4. 送入 400G 相干线路盘
+    Note over Line: FlexO 组帧+oFEC→DSP 16QAM 调制<br/>ITLA 窄线宽激光→DP-IQ 调制为 400G 双偏振相干光波
+```
 
-    rect rgb(40, 30, 60)
-    note over WSSA, OAB: 光层路由、复用与长途传输流程
-    LineA->>WSSA: 5. 输出 400G C波段单波长光信号
-    note over WSSA: 衍射光栅分光→LCoS液晶相位控制反射并多波长合路(Mux)
-    WSSA->>OAA: 6. 送入光放大盘 EDFA
-    note over OAA: 980nm Pump激励掺铒光纤全光放大→GFF平坦化光谱
-    OAA->>LineFiber: 7. 注入主干光纤传输 (带外1510nm OSC随纤监控)
-    LineFiber->>OAB: 8. 经历 1000km 衰减后到达站点 B
-    note over OAB: OSC滤光片剥离1510nm网管信号→泵浦+EDF前置低噪声光放大(PA)
-    end
+#### 阶段二：光层合波、放大与 1000km 长途传输（步骤 5-8）
 
-    rect rgb(20, 35, 60)
-    note over WSSB, ClientB: 站点 B 接收端解调与客户交付流程
-    OAB->>WSSB: 9. 放大后的多波长光信号
-    note over WSSB: 衍射光栅分光→LCoS液晶相位调整将特定400G波长下路由(Demux)至指定线路盘
-    WSSB->>LineB: 10. 送入相干线路盘
-    note over LineB: ITLA本振光+90°光桥相干混合→Balanced PD/TIA解调为4路基带信号→ADC模数转换→DSP数字CD/PMD补偿→oFEC引擎纠错→Framer剥离开销解出ODU4
-    LineB->>XCSB: 11. ODU4 时隙送入集中电交叉盘
-    note over XCSB: Switch Fabric ASIC 将 ODU4 交换至目标支路槽位
-    XCSB->>TribB: 12. 送入客户侧支路盘
-    note over TribB: Framer剥离OPU4开销，GMP解映射还原100GE→TOSA激光驱动器驱动发光
-    TribB->>ClientB: 13. 还原为原始 100GE 灰光信号交付给客户设备 B
-    end
+```mermaid
+sequenceDiagram
+    participant Line as 线路盘(站点A)
+    participant WSS as ROADM WSS
+    participant OA as EDFA 光放
+    participant Fiber as 主干光纤
+    participant OA_B as EDFA 光放(站点B)
+
+    Line->>WSS: 5. 输出 400G C 波段单波长
+    Note over WSS: 衍射光栅分光→LCoS 液晶相位控制<br/>反射合波 (Mux)
+    WSS->>OA: 6. 送入 EDFA
+    Note over OA: 980nm Pump 激励掺铒光纤<br/>GFF 平坦化光谱
+    OA->>Fiber: 7. 注入主干光纤 (1510nm OSC 随纤监控)
+    Fiber->>OA_B: 8. 经 1000km 衰减到达站点 B
+    Note over OA_B: OSC 剥离→泵浦+EDF 低噪声前放 (PA)
+```
+
+#### 阶段三：站点 B —— 光层下路、相干解调与客户交付（步骤 9-13）
+
+```mermaid
+sequenceDiagram
+    participant WSS as ROADM WSS
+    participant Line as 线路相干盘
+    participant XCS as 电交叉盘
+    participant Trib as 支路盘
+    participant Client as 客户设备B
+
+    WSS->>Line: 9. 放大后的多波长光信号
+    Note over WSS: 光栅分光→LCoS 相位调整<br/>特定 400G 波长下路由 (Demux)
+    Note over Line: 10. ITLA 本振+90°光桥相干混频<br/>平衡 PD→TIA→ADC 模数转换<br/>DSP CD/PMD 补偿→oFEC 纠错<br/>Framer 剥离开销解出 ODU4
+    Line->>XCS: 11. ODU4 时隙送入电交叉盘
+    Note over XCS: Fabric ASIC 交换至目标支路槽位
+    XCS->>Trib: 12. 送入客户侧支路盘
+    Note over Trib: Framer 剥离 OPU4 开销<br/>GMP 解映射还原 100GE→TOSA 驱动发光
+    Trib->>Client: 13. 还原 100GE 灰光交付客户
 ```
 
 ### 4.2 信号旅程：器件行为 Step-by-Step
