@@ -62,7 +62,7 @@ mindmap
       容器化微服务
         Docker 组件热升级
         k8s 网管代理
-    FOS软件
+    管控软件
       ASON/GMPLS 控制平面
         OSPF-TE 拓扑发现
         RSVP-TE 路径建立
